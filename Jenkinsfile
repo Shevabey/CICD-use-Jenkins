@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/username/node-ci-cd.git'
+                git branch: 'main', url: 'https://github.com/Shevabey/CICD-use-Jenkins.git'
             }
         }
         stage('Install Dependencies') {
@@ -30,12 +30,17 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            echo 'Pipeline finished successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+   post {
+    success {
+        emailext subject: 'Build Succeeded',
+                 body: 'The build was successful!',
+                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     }
+    failure {
+        emailext subject: 'Build Failed',
+                 body: 'The build has failed.',
+                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    }
+}
+
 }
